@@ -50,6 +50,10 @@ namespace WebApp_UnderTheHood
 
             app.UseRouting();
 
+            //Authentication Middleware
+            app.UseAuthentication();
+
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
