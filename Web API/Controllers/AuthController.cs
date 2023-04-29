@@ -1,14 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -16,7 +12,6 @@ namespace Web_API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
     public class AuthController : ControllerBase
     {
         private IConfiguration Configuration { get; }
@@ -28,7 +23,7 @@ namespace Web_API.Controllers
 
 
         [HttpPost]
-        public IActionResult Authenticate([FromBody] Credential credential)
+        public IActionResult Post([FromBody] Credential credential)
         {
             //Verify the credential
             if (credential.UserName == "admin" && credential.Password == "password")
