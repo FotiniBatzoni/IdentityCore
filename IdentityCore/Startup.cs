@@ -1,13 +1,5 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using IdentityCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp_UnderTheHood
 {
@@ -28,6 +20,7 @@ namespace WebApp_UnderTheHood
                 options.Cookie.Name = "MyCookieAuth";
                 options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/AccessDenied";
+                options.ExpireTimeSpan = TimeSpan.FromSeconds(30);
             });
 
             services.AddAuthorization(options =>
@@ -40,11 +33,21 @@ namespace WebApp_UnderTheHood
 
                 options.AddPolicy("HRManagerOnly", policy => policy
                     .RequireClaim("Department", "HR")
-                    .RequireClaim("Manager"));
+                    .RequireClaim("Manager")
+                    .Requirements.Add(new HRManagerProbationRequirement(3)));
 
             });
 
+            services.AddSingleton<IAuthorizationHandler, HRManagerProbationRequirementHandler>();
+
+
             services.AddRazorPages();
+
+
+            services.AddHttpClient("OurWebAPI", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44394/");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

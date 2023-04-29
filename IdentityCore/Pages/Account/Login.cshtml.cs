@@ -29,16 +29,22 @@ namespace IdentityCore.Pages.Account
                     new Claim(ClaimTypes.Email , "admin@test.com"),
                     new Claim("Department","HR"),
                     new Claim("Admin", "true"),
-                    new Claim("Manager", "true")
+                    new Claim("Manager", "true"),
+                    new Claim("EmploymentDate", "2023-01-01")
                 };
 
                 var identity = new ClaimsIdentity(claims, "MyCookieAuth") ;
                 ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity);
 
+                var authProperties = new AuthenticationProperties()
+                {
+                    IsPersistent = Credential.RememberMe
+                };
+
                 //serialize the ClaimsPrincipal into a string 
                 //and then encrypt that string
                 //and save it as a Cookie in th HttpContext 
-                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal);
+                await HttpContext.SignInAsync("MyCookieAuth", claimsPrincipal, authProperties);
 
                 return RedirectToPage("/index");
             }
@@ -56,6 +62,9 @@ namespace IdentityCore.Pages.Account
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            [Display(Name = "Remember Me")]
+            public bool RememberMe { get; set; }
         }
     
 }
