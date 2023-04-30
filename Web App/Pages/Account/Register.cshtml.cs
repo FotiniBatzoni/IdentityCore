@@ -5,16 +5,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Web_App.Data.Account;
 using Web_App.Services;
 
 namespace Web_App.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly IEmailService emailService;
 
-        public RegisterModel(UserManager<IdentityUser> userManager, IEmailService emailService)
+        public RegisterModel(UserManager<User> userManager, IEmailService emailService)
         {
             this.userManager = userManager;
             this.emailService = emailService;
@@ -37,10 +38,12 @@ namespace Web_App.Pages.Account
             if(!ModelState.IsValid) return Page();
 
             //Create the user
-            var user = new IdentityUser
+            var user = new User
             {
                 Email = RegisterViewModel.Email,
-                UserName = RegisterViewModel.Email
+                UserName = RegisterViewModel.Email,
+                Department = RegisterViewModel.Department,
+                Position = RegisterViewModel.Position,
             };
 
             var result =await this.userManager.CreateAsync(user, RegisterViewModel.Password);
@@ -83,5 +86,11 @@ namespace Web_App.Pages.Account
         [Required]
         [DataType(dataType:DataType.Password)]
         public string Password { get; set; }
+
+        [Required]
+        public string Department { get; set; }
+
+        [Required]
+        public string Position { get; set; }
     }
 }
