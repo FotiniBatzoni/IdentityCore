@@ -31,7 +31,7 @@ namespace Web_App
                 options.UseSqlServer(Configuration.GetConnectionString("Default"));
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>( options =>
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = true;
@@ -41,9 +41,10 @@ namespace Web_App
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
                 options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedEmail =true;
+                options.SignIn.RequireConfirmedEmail = true;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
             {

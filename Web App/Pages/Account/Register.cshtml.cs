@@ -40,7 +40,14 @@ namespace Web_App.Pages.Account
             var result =await this.userManager.CreateAsync(user, RegisterViewModel.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("/Account/Login");
+               var confirmationToken = 
+                    await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                return Redirect(Url.PageLink("/Account/ConfirmEmail",
+                    values : new { userId = user.Id , token = confirmationToken }
+                    ));
+                
+                // return RedirectToAction("/Account/Login");
             }
             else
             {
