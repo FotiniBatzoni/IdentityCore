@@ -41,6 +41,7 @@ namespace Web_App
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
                 options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail =true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
