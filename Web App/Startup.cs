@@ -14,6 +14,7 @@ using Web_App.Data;
 using Web_App.Data.Account;
 using Web_App.Services;
 using Web_App.Settings;
+using static Web_App.Pages.Account.UserProfileModel;
 
 namespace Web_App
 {
@@ -57,7 +58,8 @@ namespace Web_App
 
             services.Configure<SMTPSetting>(Configuration.GetSection("SMTP"));
 
-            services.AddSingleton<IEmailService,EmailService>();    
+            services.AddSingleton<IEmailService,EmailService>();
+
 
             services.AddRazorPages();
         }
