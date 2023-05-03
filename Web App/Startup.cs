@@ -48,6 +48,7 @@ namespace Web_App
                 options.SignIn.RequireConfirmedEmail = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                //Gives 2 Factor Authentication Functionality
                 .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>
