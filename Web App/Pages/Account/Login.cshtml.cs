@@ -1,10 +1,10 @@
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Web_App.Data.Account;
 
@@ -22,8 +22,13 @@ namespace Web_App.Pages.Account
             [BindProperty]
             public CredentialViewModel Credential { get; set; }
 
-            public void OnGet()
+            [BindProperty]
+            public IEnumerable<AuthenticationScheme> ExternalLoginProviders { get; set; }
+
+        public async Task OnGet()
             {
+                this.ExternalLoginProviders =
+                await signInManager.GetExternalAuthenticationSchemesAsync();
             }
 
             public async Task<IActionResult> OnPostAsync()
@@ -62,7 +67,17 @@ namespace Web_App.Pages.Account
                     return Page();
                 }
             }
-        }
+
+            public IActionResult onPostLoginExternally(string provider)
+            {
+                var properties =
+                signInManager.ConfigureExternalAuthenticationProperties(provider, null);
+
+                properties.RedirectUri = Url.Action("", "");
+
+                return Challenge(properties);
+            }
+    }
 
         public class CredentialViewModel
         {
